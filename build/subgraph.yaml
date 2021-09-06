@@ -8,6 +8,7 @@ dataSources:
     source:
       address: "0xfB85B9Ec50560e302Ab106F1E2857d95132120D0"
       abi: SDAOTokenStaking
+      startBlock: 13172767
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
