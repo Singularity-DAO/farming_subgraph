@@ -1,187 +1,127 @@
-# MasterChef
-type MasterChef @entity {
-    # Contract address
-    id: ID!
-
-    # Owner
-    owner: Bytes!
-
-    # Start block
-    startBlock: BigInt!
-
-    # SDAO
-    rewardsToken: Bytes!
-
-    # totalRewardsReceived
-    totalRewardsReceived: BigInt!
-
-    # Pools
-    pools: [Pool!]! @derivedFrom(field: "owner")
-
-    # Pool count
-    poolCount: BigInt!
-
-    # SLP Balance
-    slpBalance: BigDecimal!
-
-    # SLP Age
-    slpAge: BigDecimal!
-
-    # SLP Removed
-    slpAgeRemoved: BigDecimal!
-
-    # SLP Deposited
-    slpDeposited: BigDecimal!
-
-    # SLP Withdrawn
-    slpWithdrawn: BigDecimal!
-
-    # History
-    history: [History!]! @derivedFrom(field: "owner")
-
-    # Upated at
-    updatedAt: BigInt!
-}
-
-type History @entity {
-    # Master chef id concatenated with timestamp
-    id: ID!
-
-    # Owner (MasterChef, Pool, or User).
-    owner: MasterChef!
-
-    # SLP Balance
-    slpBalance: BigDecimal!
-
-    # SLP Age
-    slpAge: BigDecimal!
-
-    # SLP Removed
-    slpAgeRemoved: BigDecimal!
-
-    # SLP Deposited
-    slpDeposited: BigDecimal!
-
-    # SLP Withdrawn
-    slpWithdrawn: BigDecimal!
-
-    # Timestamp
-    timestamp: BigInt!
-
-    # Block
-    block: BigInt!
-}
-
-# Pool
-type Pool @entity {
-    # Index of pool in poolInfo on MasterChef contract
-    id: ID!
-
-    # Owner
-    owner: MasterChef!
-
-    # lpSupply
-    lpSupply: BigInt!
-
-    # Allocation point
-    tokenPerBlock: BigInt!
-
-    # Last reward block
-    lastRewardBlock: BigInt!
-
-    # accRewardsPerShare
-    accRewardsPerShare: BigInt!
-
-    # endOfEpochBlock
-    endOfEpochBlock: BigInt!
-
-    # SLP token balance
-    balance: BigInt!
-
-    # Pool users
-    users: [User!]! @derivedFrom(field: "pool")
-
-    # User count
-    userCount: BigInt!
-
-    # SLP Balance
-    slpBalance: BigDecimal!
-
-    # SLP Age
-    slpAge: BigDecimal!
-
-    # SLP Removed
-    slpAgeRemoved: BigDecimal!
-
-    # SLP Deposited
-    slpDeposited: BigDecimal!
-
-    # SLP Withdrawn
-    slpWithdrawn: BigDecimal!
-
-    # Timestamp
-    timestamp: BigInt!
-
-    # Block
-    block: BigInt!
-
-    # Upated at
-    updatedAt: BigInt!
-
-}
-
-type PoolHistory @entity {
-    # Pool id concatenated with timestamp
-    id: ID!
-
-    # Pool
-    pool: Pool!
-
-    # SLP Balance
-    slpBalance: BigDecimal!
-
-    # SLP Age
-    slpAge: BigDecimal!
-
-    # SLP Removed
-    slpAgeRemoved: BigDecimal!
-
-    # SLP Deposited
-    slpDeposited: BigDecimal!
-
-    # SLP Withdrawn
-    slpWithdrawn: BigDecimal!
-
-    # User Count
-    userCount: BigInt!
-
-    # Timestamp
-    timestamp: BigInt!
-
-    # Block
-    block: BigInt!
-
-}
 
 type User @entity {
-    # Pool id concatenated with user address
-    id: ID!
+  id: ID!
+  address: String!
+  balance: BigInt!
+  transactionCount: Int!
+}
 
-    # User address
-    address: Bytes!
+type UserCounter @entity {
+  id: ID!
+  count: Int!
+}
 
-    # Related pool
-    pool: Pool
+type Approval @entity {
+  id: ID!
+  owner: Bytes! # address
+  spender: Bytes! # address
+  amount: BigInt! # uint256
+}
 
-    # Amount
-    amount: BigInt!
+type DelegateChanged @entity {
+  id: ID!
+  delegator: Bytes! # address
+  fromDelegate: Bytes! # address
+  toDelegate: Bytes! # address
+}
 
-    # Reward debt
-    rewardDebt: BigInt!
+type DelegateVotesChanged @entity {
+  id: ID!
+  delegate: Bytes! # address
+  previousBalance: BigInt! # uint256
+  newBalance: BigInt! # uint256
+}
 
-    # Timestamp
-    timestamp: BigInt!
 
-    # Block
-    block: BigInt!
+type Transfer @entity {
+  id: ID!
+  from: Bytes! # address
+  to: Bytes! # address
+  amount: BigInt! # uint256
+}
+
+type Deposit @entity {
+  id: ID!
+  user: Bytes! # address
+  pid: BigInt! # uint256
+  amount: BigInt! # uint256
+  to: Bytes! # address
+}
+
+type EmergencyWithdraw @entity {
+  id: ID!
+  user: Bytes! # address
+  pid: BigInt! # uint256
+  amount: BigInt! # uint256
+  to: Bytes! # address
+}
+
+type ExtendPool @entity {
+  id: ID!
+  pid: BigInt! # uint256
+  rewardBlock: BigInt! # uint256
+  endOfEpochBlock: BigInt! # uint256
+}
+
+type Harvest @entity {
+  id: ID!
+  user: Bytes! # address
+  pid: BigInt! # uint256
+  amount: BigInt! # uint256
+}
+
+type LogPoolAddition @entity {
+  id: ID!
+  pid: BigInt! # uint256
+  lpToken: Bytes! # address
+}
+
+type LogUpdatePool @entity {
+  id: ID!
+  pid: BigInt! # uint256
+  lastRewardBlock: BigInt! # uint256
+  lpSupply: BigInt! # uint256
+  accRewardsPerShare: BigInt! # uint256
+}
+
+type OwnershipTransferred @entity {
+  id: ID!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+}
+
+type RewardsAdded @entity {
+  id: ID!
+  amount: BigInt! # uint256
+}
+
+type Withdraw @entity {
+  id: ID!
+  user: Bytes! # address
+  pid: BigInt! # uint256
+  amount: BigInt! # uint256
+  to: Bytes! # address
+}
+
+# MasterChef
+type MasterChef @entity {
+  id: ID!
+  owner: Bytes!
+  startBlock: BigInt!
+  rewardsToken: Bytes!
+  totalRewardsReceived: BigInt!
+  pools: [Pool!]! @derivedFrom(field: "owner")
+  poolCount: BigInt!
+  updatedAt: BigInt!
+}
+
+
+type Pool @entity {
+  id: ID!
+  owner: MasterChef!
+  tokenPerBlock : BigInt! # uint256
+  lastRewardBlock: BigInt! # uint256
+  lpSupply: BigInt! # uint256
+  accRewardsPerShare: BigInt! # uint256
+  endOfEpochBlock: BigInt! # uint256
 }
