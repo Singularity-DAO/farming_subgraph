@@ -13,5 +13,21 @@ The Graph exposes a GraphQL endpoint to query the events and entities within the
 3. Build the Subgraph `graph codegen && graph build`
 4. Deploy the Subgraph `graph deploy --studio [SUBGRAPH_NAME]`.
 
+## graph endpoint 
+
+https://api.studio.thegraph.com/query/9424/testaaa/0.0.12
+
 ## Example Queries
-COMING SOON
+
+
+{
+  pools(first:10){
+    id
+    owner
+    tokenPerBlock
+    lastRewardBlock
+    lpSupply
+    accRewardsPerShare
+    endOfEpochBlock
+  }
+}
