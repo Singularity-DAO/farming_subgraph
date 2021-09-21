@@ -1,0 +1,78 @@
+
+specVersion: 0.0.3
+description: Masterchef
+repository: https://github.com/Singularity-DAO
+schema:
+  file: ./subgraphs/masterchef.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MasterChef
+    network: mainnet
+    source:
+      address: '0xfB85B9Ec50560e302Ab106F1E2857d95132120D0'
+      abi: MasterChef
+      startBlock: 13257211
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SDAOTokenStaking
+    network: mainnet
+    source:
+      address: "0xfB85B9Ec50560e302Ab106F1E2857d95132120D0"
+      abi: SDAOTokenStaking
+      startBlock: 13172767
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MasterChef
+        - History
+        - Pool
+        - PoolHistory
+        - User
+      abis:
+        - name: SDAOTokenStaking
+          file: ./abis/SDAOTokenStaking.json
+      eventHandlers:
+        - event: Deposit(indexed address,indexed uint256,uint256)
+          handler: deposit
+        - event: EmergencyWithdraw(indexed address,indexed uint256,uint256)
+          handler: emergencyWithdraw
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: ownershipTransferred
+        - event: Withdraw(indexed address,indexed uint256,uint256)
+          handler: withdraw
+        - event: Deposit(indexed address,indexed uint256,uint256,indexed address)
+          handler: handleDeposit
+        - event: EmergencyWithdraw(indexed address,indexed uint256,uint256,indexed address)
+          handler: handleEmergencyWithdraw
+        - event: ExtendPool(indexed uint256,uint256,uint256)
+          handler: handleExtendPool
+        - event: Harvest(indexed address,indexed uint256,uint256)
+          handler: handleHarvest
+        - event: LogPoolAddition(indexed uint256,indexed address)
+          handler: handleLogPoolAddition
+        - event: LogUpdatePool(indexed uint256,uint256,uint256,uint256)
+          handler: handleLogUpdatePool
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RewardsAdded(uint256)
+          handler: handleRewardsAdded
+        - event: Withdraw(indexed address,indexed uint256,uint256,indexed address)
+          handler: handleWithdraw
+      callHandlers:
+        - function: add(address,uint256,uint256)
+          handler: add
+        - function: extendPool(uint256,uint256,uint256)
+          handler: extendPool
+        - function: massUpdatePools()
+          handler: massUpdatePools
+        - function: updatePool(uint256)
+          handler: updatePool
+      file: ../src/masterchef.ts
+        - function: massUpdatePools(uint256[])
+          handler: massUpdatePools
+      file: ./src/mapping.ts
