@@ -1,4 +1,4 @@
-# Singularity Subgraph
+# Singularity farming contract Subgraph
 
 The Graph exposes a GraphQL endpoint to query the events and entities within the SingularityDao ecosytem.
 
