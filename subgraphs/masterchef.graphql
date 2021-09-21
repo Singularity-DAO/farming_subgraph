@@ -1,0 +1,187 @@
+# MasterChef
+type MasterChef @entity {
+    # Contract address
+    id: ID!
+
+    # Owner
+    owner: Bytes!
+
+    # Start block
+    startBlock: BigInt!
+
+    # SDAO
+    rewardsToken: Bytes!
+
+    # totalRewardsReceived
+    totalRewardsReceived: BigInt!
+
+    # Pools
+    pools: [Pool!]! @derivedFrom(field: "owner")
+
+    # Pool count
+    poolCount: BigInt!
+
+    # SLP Balance
+    slpBalance: BigDecimal!
+
+    # SLP Age
+    slpAge: BigDecimal!
+
+    # SLP Removed
+    slpAgeRemoved: BigDecimal!
+
+    # SLP Deposited
+    slpDeposited: BigDecimal!
+
+    # SLP Withdrawn
+    slpWithdrawn: BigDecimal!
+
+    # History
+    history: [History!]! @derivedFrom(field: "owner")
+
+    # Upated at
+    updatedAt: BigInt!
+}
+
+type History @entity {
+    # Master chef id concatenated with timestamp
+    id: ID!
+
+    # Owner (MasterChef, Pool, or User).
+    owner: MasterChef!
+
+    # SLP Balance
+    slpBalance: BigDecimal!
+
+    # SLP Age
+    slpAge: BigDecimal!
+
+    # SLP Removed
+    slpAgeRemoved: BigDecimal!
+
+    # SLP Deposited
+    slpDeposited: BigDecimal!
+
+    # SLP Withdrawn
+    slpWithdrawn: BigDecimal!
+
+    # Timestamp
+    timestamp: BigInt!
+
+    # Block
+    block: BigInt!
+}
+
+# Pool
+type Pool @entity {
+    # Index of pool in poolInfo on MasterChef contract
+    id: ID!
+
+    # Owner
+    owner: MasterChef!
+
+    # lpSupply
+    lpSupply: BigInt!
+
+    # Allocation point
+    tokenPerBlock: BigInt!
+
+    # Last reward block
+    lastRewardBlock: BigInt!
+
+    # accRewardsPerShare
+    accRewardsPerShare: BigInt!
+
+    # endOfEpochBlock
+    endOfEpochBlock: BigInt!
+
+    # SLP token balance
+    balance: BigInt!
+
+    # Pool users
+    users: [User!]! @derivedFrom(field: "pool")
+
+    # User count
+    userCount: BigInt!
+
+    # SLP Balance
+    slpBalance: BigDecimal!
+
+    # SLP Age
+    slpAge: BigDecimal!
+
+    # SLP Removed
+    slpAgeRemoved: BigDecimal!
+
+    # SLP Deposited
+    slpDeposited: BigDecimal!
+
+    # SLP Withdrawn
+    slpWithdrawn: BigDecimal!
+
+    # Timestamp
+    timestamp: BigInt!
+
+    # Block
+    block: BigInt!
+
+    # Upated at
+    updatedAt: BigInt!
+
+}
+
+type PoolHistory @entity {
+    # Pool id concatenated with timestamp
+    id: ID!
+
+    # Pool
+    pool: Pool!
+
+    # SLP Balance
+    slpBalance: BigDecimal!
+
+    # SLP Age
+    slpAge: BigDecimal!
+
+    # SLP Removed
+    slpAgeRemoved: BigDecimal!
+
+    # SLP Deposited
+    slpDeposited: BigDecimal!
+
+    # SLP Withdrawn
+    slpWithdrawn: BigDecimal!
+
+    # User Count
+    userCount: BigInt!
+
+    # Timestamp
+    timestamp: BigInt!
+
+    # Block
+    block: BigInt!
+
+}
+
+type User @entity {
+    # Pool id concatenated with user address
+    id: ID!
+
+    # User address
+    address: Bytes!
+
+    # Related pool
+    pool: Pool
+
+    # Amount
+    amount: BigInt!
+
+    # Reward debt
+    rewardDebt: BigInt!
+
+    # Timestamp
+    timestamp: BigInt!
+
+    # Block
+    block: BigInt!
+}
