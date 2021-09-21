@@ -12,6 +12,16 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+
+export class ExampleEntity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("count", Value.fromBigInt(BigInt.zero()));
+    this.set("user", Value.fromBytes(Bytes.empty()));
+    this.set("pid", Value.fromBigInt(BigInt.zero()));
+
 export class MasterChef extends Entity {
   constructor(id: string) {
     super();
@@ -101,10 +111,26 @@ export class Pool extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
   }
 
   save(): void {
     let id = this.get("id");
+
+    assert(id != null, "Cannot save ExampleEntity entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save ExampleEntity entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("ExampleEntity", id.toString(), this);
+    }
+  }
+
+  static load(id: string): ExampleEntity | null {
+    return changetype<ExampleEntity | null>(store.get("ExampleEntity", id));
+
     assert(id !== null, "Cannot save Pool entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
@@ -340,16 +366,46 @@ export class PoolHistory extends Entity {
 
   static load(id: string): PoolHistory | null {
     return store.get("PoolHistory", id) as PoolHistory | null;
+
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+
+    return value!.toString();
+
   }
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
+
+
+  get count(): BigInt {
+    let value = this.get("count");
+    return value!.toBigInt();
+  }
+
+  set count(value: BigInt) {
+    this.set("count", Value.fromBigInt(value));
+  }
+
+  get user(): Bytes {
+    let value = this.get("user");
+    return value!.toBytes();
+  }
+
+  set user(value: Bytes) {
+    this.set("user", Value.fromBytes(value));
+  }
+
+  get pid(): BigInt {
+    let value = this.get("pid");
+    return value!.toBigInt();
+  }
+
+  set pid(value: BigInt) {
+    this.set("pid", Value.fromBigInt(value));
 
   get pool(): string {
     let value = this.get("pool");
@@ -523,5 +579,6 @@ export class User extends Entity {
 
   set block(value: BigInt) {
     this.set("block", Value.fromBigInt(value));
+
   }
 }
